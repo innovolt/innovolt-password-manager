@@ -2,6 +2,9 @@
 This Password Manager is built on the top of Fortanix SDKMS. It uses the Fortanix SDKMS as backend storage and calls the appropriate APIs to perform different operations like create a secret, fetch a secret, log into the SDKMS.
 It provides a set of user friendly CLIs to interact with the Password Manager
 
+# Prerequisite
+Please create an account on https://sdkms.fortanix.com
+
 # Build docker image (from src)(optional step)
 ```
 # git clone git@github.com:innovolt/password-manager.git

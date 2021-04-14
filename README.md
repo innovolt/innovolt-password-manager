@@ -3,7 +3,8 @@ This Password Manager is built on the top of Fortanix SDKMS. It uses the Fortani
 It provides a set of user friendly CLIs to interact with the Password Manager
 
 # Prerequisite
-Please create an account on https://sdkms.fortanix.com
+1. Please create an account on https://sdkms.fortanix.com
+2. Install docker on your machine (https://docs.docker.com/get-docker/)
 
 # Build docker image (from src)(optional step)
 ```
@@ -95,3 +96,9 @@ Select a Group [ID]: 0cc9786e-5e05-458d-a81b-4df645442097
 | mysecret | www.facebook.com | demouser | demopassword |
 +----------+------------------+----------+--------------+
 ```
+
+# TODO
+1. Logging
+2. Improve Client code
+3. Improve Error handling
+4. Add a cli to list all the secrets within an account and group

@@ -48,14 +48,14 @@ func GetSecret(secretName string) error {
 	}
 
 	secret, err := models.DecodeSecret(secretVal)
-    if err != nil {
-        return err
-    }
+	if err != nil {
+		return err
+	}
 
-    secret.Name = secretName
-    secret.AccountId = accountId
-    secret.GroupId = groupId
-    secret.Render()
+	secret.Name = secretName
+	secret.AccountId = accountId
+	secret.GroupId = groupId
+	secret.Render()
 
-    return nil
+	return nil
 }

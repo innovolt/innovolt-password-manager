@@ -10,12 +10,12 @@ import (
 )
 
 type Secret struct {
-	Name string
-	Domain string
-	Username string
-	Password string
+	Name      string
+	Domain    string
+	Username  string
+	Password  string
 	AccountId string
-	GroupId string
+	GroupId   string
 }
 
 func (secret Secret) GetList() []string {
@@ -32,8 +32,8 @@ func (secret Secret) Render() {
 	table.SetHeader([]string{"Name", "Domain", "Username", "Password"})
 	table.SetRowLine(true)
 	// Set color
-	blueBoldFgColor := tablewriter.Colors {
-		tablewriter.Bold, 
+	blueBoldFgColor := tablewriter.Colors{
+		tablewriter.Bold,
 		tablewriter.FgBlueColor,
 	}
 	table.SetHeaderColor(
@@ -43,7 +43,7 @@ func (secret Secret) Render() {
 		blueBoldFgColor,
 	)
 
-	greenFgColor := tablewriter.Colors {
+	greenFgColor := tablewriter.Colors{
 		tablewriter.FgGreenColor,
 	}
 	table.SetColumnColor(
@@ -74,12 +74,12 @@ func DecodeSecret(secret string) (Secret, error) {
 	username := decodedStr[1]
 	password := decodedStr[2]
 
-	return Secret {
-		Name: "",
-		Domain: domain,
-		Username: username,
-		Password: password,
+	return Secret{
+		Name:      "",
+		Domain:    domain,
+		Username:  username,
+		Password:  password,
 		AccountId: "",
-		GroupId: "",
+		GroupId:   "",
 	}, nil
 }

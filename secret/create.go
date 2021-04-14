@@ -17,7 +17,7 @@ func CreateSecret(secretName string) error {
 
 	// Take input from User
 	var domain string
-	fmt.Printf("Domain [https://amazon.in]: ")
+	fmt.Printf("Domain [e.g. www.abc.com]: ")
 	fmt.Scanln(&domain)
 
 	var username string
@@ -56,12 +56,12 @@ func CreateSecret(secretName string) error {
 	fmt.Scanln(&groupId)
 
 	secret := models.Secret{
-		Name: secretName,
-		Domain: domain,
-		Username: username,
-		Password: password,
+		Name:      secretName,
+		Domain:    domain,
+		Username:  username,
+		Password:  password,
 		AccountId: accountId,
-		GroupId: groupId,
+		GroupId:   groupId,
 	}
 
 	err = sdkms.CreateSecret(&secret)

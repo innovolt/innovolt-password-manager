@@ -6,10 +6,9 @@ import (
 	"github.com/olekukonko/tablewriter"
 )
 
-
 type Account struct {
 	Name string
-	Id string
+	Id   string
 }
 
 func (account Account) GetList() []string {
@@ -32,13 +31,13 @@ func (accounts Accounts) Render() {
 	table.SetHeader([]string{"Account Name", "Account ID"})
 	table.SetRowLine(true)
 	// Set color
-	blueBoldFgColor := tablewriter.Colors {
-		tablewriter.Bold, 
+	blueBoldFgColor := tablewriter.Colors{
+		tablewriter.Bold,
 		tablewriter.FgBlueColor,
 	}
 	table.SetHeaderColor(blueBoldFgColor, blueBoldFgColor)
 
-	greenFgColor := tablewriter.Colors {
+	greenFgColor := tablewriter.Colors{
 		tablewriter.FgGreenColor,
 	}
 	table.SetColumnColor(greenFgColor, greenFgColor)

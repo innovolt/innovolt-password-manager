@@ -1,64 +1,64 @@
 package cmd
 
 import (
-    "fmt"
+	"fmt"
 
-    "github.com/spf13/cobra"
-    "github.com/spf13/viper"
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 
-    "innovolt-pm/auth"
+	"innovolt-pm/auth"
 )
 
 func init() {
-    loginCmd := loginCmd()
-    // rootCmd is defined in root.go
-    rootCmd.AddCommand(&loginCmd)
+	loginCmd := loginCmd()
+	// rootCmd is defined in root.go
+	rootCmd.AddCommand(&loginCmd)
 }
 
-func loginCmd() cobra.Command{
-    var username string
-    var password string
-    var apikey string
+func loginCmd() cobra.Command {
+	var username string
+	var password string
+	var apikey string
 
-    var cmdLogin = cobra.Command{
-        Use: "login user|app",
-        Short: "Log into SDKMS (https://sdkms.fortanix.com using user credentials)",
-        Long: `Authenticate an User into SDKMS using its username and password.`,
-        Args: cobra.ExactArgs(1),
-    }
+	var cmdLogin = cobra.Command{
+		Use:   "login user|app",
+		Short: "Log into SDKMS (https://sdkms.fortanix.com using user credentials)",
+		Long:  `Authenticate an User into SDKMS using its username and password.`,
+		Args:  cobra.ExactArgs(1),
+	}
 
-    var cmdUser = &cobra.Command{
-        Use: "user",
-        Short: "Log into SDKMS (https://sdkms.fortanix.com) using user credentials",
-        Long: `Authenticate an User into SDKMS using its username and password.`,
-        Run: func(cmd *cobra.Command, args []string) {
-            auth.UserAuthenticate(&auth.UserCredentials{
-                Username: viper.GetString("username"),
-                Password: viper.GetString("password"),
-            })
-        },
-    }
-    cmdUser.Flags().StringVarP(&username, "username", "u", "", "Enter SDKMS Username")
-    cmdUser.Flags().StringVarP(&password, "password", "p", "", "Enter SDKMS Password")
-    cmdUser.MarkFlagRequired("username")
-    cmdUser.MarkFlagRequired("password")
-    viper.BindPFlag("username", cmdUser.Flags().Lookup("username"))
-    viper.BindPFlag("password", cmdUser.Flags().Lookup("password"))
+	var cmdUser = &cobra.Command{
+		Use:   "user",
+		Short: "Log into SDKMS (https://sdkms.fortanix.com) using user credentials",
+		Long:  `Authenticate an User into SDKMS using its username and password.`,
+		Run: func(cmd *cobra.Command, args []string) {
+			auth.UserAuthenticate(&auth.UserCredentials{
+				Username: viper.GetString("username"),
+				Password: viper.GetString("password"),
+			})
+		},
+	}
+	cmdUser.Flags().StringVarP(&username, "username", "u", "", "Enter SDKMS Username")
+	cmdUser.Flags().StringVarP(&password, "password", "p", "", "Enter SDKMS Password")
+	cmdUser.MarkFlagRequired("username")
+	cmdUser.MarkFlagRequired("password")
+	viper.BindPFlag("username", cmdUser.Flags().Lookup("username"))
+	viper.BindPFlag("password", cmdUser.Flags().Lookup("password"))
 
-    var cmdApp = &cobra.Command{
-        Use: "app",
-        Short: "Log into SDKMS (https://sdkms.fortanix.com) using App API Key",
-        Long: `Authenticate an App into SDKMS using its API Key.`,
-        Run: func(cmd *cobra.Command, args []string) {
-            fmt.Println("API Key:", viper.GetString("apikey"))
-        },
-    }
-    cmdApp.Flags().StringVarP(&apikey, "apikey", "a", "", "Enter SDKMS App API Key")
-    cmdApp.MarkFlagRequired("apikey")
-    viper.BindPFlag("apikey", cmdApp.Flags().Lookup("apikey"))
+	var cmdApp = &cobra.Command{
+		Use:   "app",
+		Short: "Log into SDKMS (https://sdkms.fortanix.com) using App API Key",
+		Long:  `Authenticate an App into SDKMS using its API Key.`,
+		Run: func(cmd *cobra.Command, args []string) {
+			fmt.Println("API Key:", viper.GetString("apikey"))
+		},
+	}
+	cmdApp.Flags().StringVarP(&apikey, "apikey", "a", "", "Enter SDKMS App API Key")
+	cmdApp.MarkFlagRequired("apikey")
+	viper.BindPFlag("apikey", cmdApp.Flags().Lookup("apikey"))
 
-    cmdLogin.AddCommand(cmdUser)
-    cmdLogin.AddCommand(cmdApp)
+	cmdLogin.AddCommand(cmdUser)
+	cmdLogin.AddCommand(cmdApp)
 
-    return cmdLogin
+	return cmdLogin
 }

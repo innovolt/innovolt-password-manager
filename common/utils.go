@@ -37,9 +37,9 @@ func GetAccessToken() (string, error) {
 		return "", err
 	}
 
-    accessToken, ok := jsonData["access_token"].(string)
-    if !ok {
-    	return "", errors.New("Failed to type cast interface into string")
-    }
-    return string(accessToken), nil
+	accessToken, ok := jsonData["access_token"].(string)
+	if !ok {
+		return "", errors.New("Failed to type cast interface into string")
+	}
+	return string(accessToken), nil
 }

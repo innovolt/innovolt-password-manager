@@ -8,7 +8,7 @@ import (
 
 type Group struct {
 	Name string
-	Id string
+	Id   string
 }
 
 func (group Group) GetList() []string {
@@ -30,13 +30,13 @@ func (groups Groups) Render() {
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetHeader([]string{"Group Name", "Group ID"})
 	table.SetRowLine(true)
-	blueBoldFgColor := tablewriter.Colors {
-		tablewriter.Bold, 
+	blueBoldFgColor := tablewriter.Colors{
+		tablewriter.Bold,
 		tablewriter.FgBlueColor,
 	}
 	table.SetHeaderColor(blueBoldFgColor, blueBoldFgColor)
 
-	greenFgColor := tablewriter.Colors {
+	greenFgColor := tablewriter.Colors{
 		tablewriter.FgGreenColor,
 	}
 	table.SetColumnColor(greenFgColor, greenFgColor)
@@ -45,4 +45,3 @@ func (groups Groups) Render() {
 	}
 	table.Render()
 }
-

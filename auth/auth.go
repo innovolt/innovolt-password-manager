@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
+	"innovolt-pm/client"
 	"innovolt-pm/common"
 	"innovolt-pm/sdkms"
 )
@@ -13,11 +14,29 @@ func UserAuthenticate(userCredentials *UserCredentials) {
 	var username = userCredentials.Username
 	var password = userCredentials.Password
 
-	client := &http.Client{}
-	req, err := http.NewRequest("POST", sdkms.SessionAuthEndpoint, nil)
-	req.SetBasicAuth(username, password)
-	resp, err := client.Do(req)
-
+	client.SetBasicUserAuth(username, password)
+	authHeaderVal, err := client.GetAuthHeaderValue()
+	if err != nil {
+		fmt.Println("Failed to get Basic Auth Header value. Reason: " + err.Error())
+		return
+	}
+	request := client.New()
+	err = request.WithHeader("Authorization", authHeaderVal)
+	if err != nil {
+		fmt.Println("Failed to set header. Reason: " + err.Error())
+		return
+	}
+	err = request.WithMethod("POST")
+	if err != nil {
+		fmt.Println("Failed to set method. Reason: " + err.Error())
+		return
+	}
+	err = request.WithUrl(sdkms.SessionAuthEndpoint)
+	if err != nil {
+		fmt.Println("Failed to set url. Reason: " + err.Error())
+		return
+	}
+	resp, err := request.Send()
 	// Check for errors because of invalid request etc.
 	if err != nil {
 		fmt.Println("Failed to authenticate. Reason: " + err.Error())

@@ -1,9 +1,9 @@
 package main
 
 import (
-    "innovolt-pm/cmd"
+	"innovolt-pm/cmd"
 )
 
 func main() {
-    cmd.Execute()
+	cmd.Execute()
 }

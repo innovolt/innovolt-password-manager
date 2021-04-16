@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
+	"innovolt-pm/client"
 	"innovolt-pm/common"
 	"innovolt-pm/models"
 )
@@ -87,11 +88,29 @@ func GetAllGroups(accountId string) (models.Groups, error) {
 		return groups, err
 	}
 
-	client := &http.Client{}
-	req, err := http.NewRequest("GET", GetGroupsEndpoint, nil)
-	req.Header.Add("Authorization", "Bearer "+accessToken)
-	resp, err := client.Do(req)
-
+	client.SetBearerAuth(accessToken)
+	authHeaderVal, err := client.GetAuthHeaderValue()
+	if err != nil {
+		return groups, err
+	}
+	request := client.New()
+	err = request.WithHeader("Authorization", authHeaderVal)
+	if err != nil {
+		return groups, err
+	}
+	err = request.WithMethod("GET")
+	if err != nil {
+		return groups, err
+	}
+	err = request.WithUrl(GetGroupsEndpoint)
+	if err != nil {
+		return groups, err
+	}
+	resp, err := request.Send()
+	// Check for errors because of invalid request etc.
+	if err != nil {
+		return groups, nil
+	}
 	if resp.StatusCode == http.StatusUnauthorized {
 		return groups, errors.New("Your session is expired. Please login again.")
 	}
@@ -127,22 +146,36 @@ func CreateSecret(secret *models.Secret) error {
 		return err
 	}
 
-	client := &http.Client{}
-	data := Secret{
-		Name:    secret.Name,
-		GroupId: secret.GroupId,
-		ObjType: "SECRET",
-		KeyOps:  []string{"EXPORT"},
-		Value:   secret.Encode(),
-	}
-	payloadBuf := new(bytes.Buffer)
-	json.NewEncoder(payloadBuf).Encode(data)
-	req, err := http.NewRequest("PUT", PostKeyEndpoint, payloadBuf)
+	client.SetBearerAuth(accessToken)
+	authHeaderVal, err := client.GetAuthHeaderValue()
 	if err != nil {
 		return err
 	}
-	req.Header.Add("Authorization", "Bearer "+accessToken)
-	resp, err := client.Do(req)
+	request := client.New()
+	err = request.WithHeader("Authorization", authHeaderVal)
+	if err != nil {
+		return err
+	}
+	err = request.WithMethod("PUT")
+	if err != nil {
+		return err
+	}
+	err = request.WithUrl(PostKeyEndpoint)
+	if err != nil {
+		return err
+	}
+	data := map[string]interface{}{
+		"Name":    secret.Name,
+		"GroupId": secret.GroupId,
+		"ObjType": "SECRET",
+		"KeyOps":  []string{"EXPORT"},
+		"Value":   secret.Encode(),
+	}
+	err = request.WithBody(data)
+	if err != nil {
+		return nil
+	}
+	resp, err := request.Send()
 	if err != nil {
 		return err
 	}
@@ -170,16 +203,32 @@ func GetSecret(accountId string, groupId string, secretName string) (string, err
 		return "", err
 	}
 
-	client := &http.Client{}
-	data := map[string]string{"name": secretName}
-	payloadBuf := new(bytes.Buffer)
-	json.NewEncoder(payloadBuf).Encode(data)
-	req, err := http.NewRequest("POST", ExportKeyEndpoint, payloadBuf)
+	client.SetBearerAuth(accessToken)
+	authHeaderVal, err := client.GetAuthHeaderValue()
 	if err != nil {
 		return "", err
 	}
-	req.Header.Add("Authorization", "Bearer "+accessToken)
-	resp, err := client.Do(req)
+	request := client.New()
+	err = request.WithHeader("Authorization", authHeaderVal)
+	if err != nil {
+		return "", err
+	}
+	err = request.WithMethod("POST")
+	if err != nil {
+		return "", err
+	}
+	err = request.WithUrl(ExportKeyEndpoint)
+	if err != nil {
+		return "", err
+	}
+	data := map[string]interface{}{
+		"name": secretName,
+	}
+	err = request.WithBody(data)
+	if err != nil {
+		return "", nil
+	}
+	resp, err := request.Send()
 	if err != nil {
 		return "", err
 	}

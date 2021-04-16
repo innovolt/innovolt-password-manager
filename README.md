@@ -99,7 +99,7 @@ Select a Group [ID]: 0cc9786e-5e05-458d-a81b-4df645442097
 
 # TODO
 1. Logging
-2. Improve Client code
+2. ~~Improve Client code~~
 3. Improve Error handling
 4. Add a cli to list all the secrets within an account and group
 5. Add support to log in using API Key

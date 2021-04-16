@@ -1,8 +1,6 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
@@ -32,9 +30,12 @@ func loginCmd() cobra.Command {
 		Short: "Log into SDKMS (https://sdkms.fortanix.com) using user credentials",
 		Long:  `Authenticate an User into SDKMS using its username and password.`,
 		Run: func(cmd *cobra.Command, args []string) {
-			auth.UserAuthenticate(&auth.UserCredentials{
-				Username: viper.GetString("username"),
-				Password: viper.GetString("password"),
+			auth.Authenticate(&auth.Credential{
+				User: auth.UserCredential{
+					Username: viper.GetString("username"),
+					Password: viper.GetString("password"),
+				},
+				App: nil,
 			})
 		},
 	}
@@ -50,7 +51,12 @@ func loginCmd() cobra.Command {
 		Short: "Log into SDKMS (https://sdkms.fortanix.com) using App API Key",
 		Long:  `Authenticate an App into SDKMS using its API Key.`,
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("API Key:", viper.GetString("apikey"))
+			auth.Authenticate(&auth.Credential{
+				User: nil,
+				App: auth.AppCredential{
+					ApiKey: viper.GetString("apiKey"),
+				},
+			})
 		},
 	}
 	cmdApp.Flags().StringVarP(&apikey, "apikey", "a", "", "Enter SDKMS App API Key")

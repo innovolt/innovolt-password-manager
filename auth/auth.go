@@ -10,11 +10,19 @@ import (
 	"innovolt-pm/sdkms"
 )
 
-func UserAuthenticate(userCredentials *UserCredentials) {
-	var username = userCredentials.Username
-	var password = userCredentials.Password
+func Authenticate(credential *Credential) {
+	userCredential, ok := credential.User.(UserCredential)
+	if ok {
+		client.SetBasicUserAuth(userCredential.Username, userCredential.Password)
+	} else {
+		appCredential, ok := credential.App.(AppCredential)
+		if !ok {
+			fmt.Println("Neither User nor App credentials are set.")
+			return
+		}
+		client.SetBasicAppAuth(appCredential.ApiKey)
+	}
 
-	client.SetBasicUserAuth(username, password)
 	authHeaderVal, err := client.GetAuthHeaderValue()
 	if err != nil {
 		fmt.Println("Failed to get Basic Auth Header value. Reason: " + err.Error())

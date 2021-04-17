@@ -5,11 +5,10 @@ import (
 	"fmt"
 
 	"innovolt-pm/common"
-	"innovolt-pm/models"
 	"innovolt-pm/sdkms"
 )
 
-func CreateSecret(secretName string) error {
+func CreateSecret(name string) error {
 	_, err := common.GetAccessToken()
 	if err != nil {
 		return errors.New("Please login using innovolt-pm login")
@@ -55,16 +54,28 @@ func CreateSecret(secretName string) error {
 	fmt.Printf("Select a Group [ID]: ")
 	fmt.Scanln(&groupId)
 
-	secret := models.Secret{
-		Name:      secretName,
-		Domain:    domain,
-		Username:  username,
-		Password:  password,
-		AccountId: accountId,
-		GroupId:   groupId,
+	secret := sdkms.Secret{
+		Name:     name,
+		Owner:    common.Owner(),
+		Domain:   domain,
+		Username: username,
+		Password: password,
+	}
+	encodedSecret, err := secret.Encode()
+	if err != nil {
+		return err
 	}
 
-	err = sdkms.CreateSecret(&secret)
+	createSecretRequest := sdkms.CreateSecretRequest{
+		AccountId: accountId,
+		Name:      name,
+		GroupId:   groupId,
+		KeyOps:    []string{"EXPORT"},
+		ObjType:   "SECRET",
+		Value:     encodedSecret,
+	}
+
+	err = sdkms.CreateSecret(&createSecretRequest)
 	if err != nil {
 		return err
 	}

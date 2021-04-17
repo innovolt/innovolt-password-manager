@@ -74,7 +74,7 @@ type Request struct {
 	url    string
 }
 
-func New() Request {
+func NewRequest() Request {
 	return Request{
 		body:   map[string]interface{}{},
 		header: map[string]string{},

@@ -40,9 +40,16 @@ func secretCmd() cobra.Command {
 		Long:  "Fetch a particular secret if name is provided otherwise all.",
 		Args:  cobra.MaximumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
-			err := secret.GetSecret(args[0])
-			if err != nil {
-				color.Red(err.Error())
+			if len(args) == 0 {
+				err := secret.GetAllSecret()
+				if err != nil {
+					color.Red(err.Error())
+				}
+			} else {
+				err := secret.GetSecret(args[0])
+				if err != nil {
+					color.Red(err.Error())
+				}
 			}
 		},
 	}

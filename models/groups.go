@@ -11,10 +11,10 @@ type Group struct {
 	Id   string
 }
 
-func (group Group) GetList() []string {
+func (g Group) GetList() []string {
 	return []string{
-		group.Name,
-		group.Id,
+		g.Name,
+		g.Id,
 	}
 }
 
@@ -22,11 +22,11 @@ type Groups struct {
 	Items []Group
 }
 
-func (groups Groups) IsEmpty() bool {
-	return len(groups.Items) == 0
+func (g Groups) IsEmpty() bool {
+	return len(g.Items) == 0
 }
 
-func (groups Groups) Render() {
+func (g Groups) Render() {
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetHeader([]string{"Group Name", "Group ID"})
 	table.SetRowLine(true)
@@ -40,7 +40,7 @@ func (groups Groups) Render() {
 		tablewriter.FgGreenColor,
 	}
 	table.SetColumnColor(greenFgColor, greenFgColor)
-	for _, group := range groups.Items {
+	for _, group := range g.Items {
 		table.Append(group.GetList())
 	}
 	table.Render()

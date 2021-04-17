@@ -9,6 +9,10 @@ import (
 	"github.com/spf13/viper"
 )
 
+var (
+	NotOwnedByUsError = errors.New("Not owned by us")
+)
+
 func GetAuthConfigFilePath() string {
 	return viper.ConfigFileUsed()
 }
@@ -42,4 +46,17 @@ func GetAccessToken() (string, error) {
 		return "", errors.New("Failed to type cast interface into string")
 	}
 	return string(accessToken), nil
+}
+
+func ToMapInterface(data []byte) (map[string]interface{}, error) {
+	var mapInterface map[string]interface{}
+	err := json.Unmarshal(data, &mapInterface)
+	if err != nil {
+		return mapInterface, err
+	}
+	return mapInterface, nil
+}
+
+func Owner() string {
+	return "InnovoltPasswordManager"
 }

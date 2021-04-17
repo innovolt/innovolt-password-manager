@@ -11,10 +11,10 @@ type Account struct {
 	Id   string
 }
 
-func (account Account) GetList() []string {
+func (a Account) GetList() []string {
 	return []string{
-		account.Name,
-		account.Id,
+		a.Name,
+		a.Id,
 	}
 }
 
@@ -22,11 +22,11 @@ type Accounts struct {
 	Items []Account
 }
 
-func (accounts Accounts) IsEmpty() bool {
-	return len(accounts.Items) == 0
+func (a Accounts) IsEmpty() bool {
+	return len(a.Items) == 0
 }
 
-func (accounts Accounts) Render() {
+func (a Accounts) Render() {
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetHeader([]string{"Account Name", "Account ID"})
 	table.SetRowLine(true)
@@ -41,7 +41,7 @@ func (accounts Accounts) Render() {
 		tablewriter.FgGreenColor,
 	}
 	table.SetColumnColor(greenFgColor, greenFgColor)
-	for _, account := range accounts.Items {
+	for _, account := range a.Items {
 		table.Append(account.GetList())
 	}
 	table.Render()

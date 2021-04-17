@@ -23,13 +23,13 @@ func Authenticate(credential *Credential) {
 		client.SetBasicAppAuth(appCredential.ApiKey)
 	}
 
-	authHeaderVal, err := client.GetAuthHeaderValue()
+	authHeaderValue, err := client.GetAuthHeaderValue()
 	if err != nil {
 		fmt.Println("Failed to get Basic Auth Header value. Reason: " + err.Error())
 		return
 	}
-	request := client.New()
-	err = request.WithHeader("Authorization", authHeaderVal)
+	request := client.NewRequest()
+	err = request.WithHeader("Authorization", authHeaderValue)
 	if err != nil {
 		fmt.Println("Failed to set header. Reason: " + err.Error())
 		return
@@ -44,7 +44,7 @@ func Authenticate(credential *Credential) {
 		fmt.Println("Failed to set url. Reason: " + err.Error())
 		return
 	}
-	resp, err := request.Send()
+	response, err := request.Send()
 	// Check for errors because of invalid request etc.
 	if err != nil {
 		fmt.Println("Failed to authenticate. Reason: " + err.Error())
@@ -52,17 +52,17 @@ func Authenticate(credential *Credential) {
 	}
 
 	// Check for Unauthorized case
-	if resp.StatusCode == http.StatusUnauthorized {
+	if response.StatusCode == http.StatusUnauthorized {
 		fmt.Println("Invalid Username or Password")
 		return
 	}
 
 	fmt.Println("Logged in successfully")
 
-	bodyText, err := ioutil.ReadAll(resp.Body)
+	body, err := ioutil.ReadAll(response.Body)
 
 	configFilePath := common.GetAuthConfigFilePath()
-	err = common.SaveDataToFile(configFilePath, bodyText)
+	err = common.SaveDataToFile(configFilePath, body)
 	if err != nil {
 		fmt.Println("Failed to write to " + configFilePath + ". Reason: " + err.Error())
 		return

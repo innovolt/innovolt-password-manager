@@ -12,4 +12,6 @@ const (
 
 	PostKeyEndpoint   = SdkmsBaseEndpoint + "/crypto/v1/keys"
 	ExportKeyEndpoint = SdkmsBaseEndpoint + "/crypto/v1/keys/export"
+
+	GetSecurityObjectsEndpoint = SdkmsBaseEndpoint + "/crypto/v1/keys"
 )
